@@ -15,10 +15,28 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone', 20)->nullable();
+            $table->string('avatar')->nullable();
+            $table->enum('role', [
+                'super_admin',
+                'branch_admin',
+                'hr_manager',
+                'academic_coordinator',
+                'faculty',
+                'student',
+                'placement_officer',
+                'visitor',
+            ])->default('student');
+            $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('employee_id')->nullable()->unique();
+            $table->string('whatsapp_number', 20)->nullable();
+            $table->string('fcm_token')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
