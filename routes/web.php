@@ -4,8 +4,11 @@ use App\Livewire\Admin\BranchForm;
 use App\Livewire\Admin\BranchIndex;
 use App\Livewire\Admin\UserForm;
 use App\Livewire\Admin\UserIndex;
+use App\Livewire\Attendance\AttendanceDashboard;
+use App\Livewire\Attendance\GeoFenceManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Dashboard;
+use App\Livewire\Leave\LeaveIndex;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,9 +31,14 @@ Route::post('/logout', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-    // Placeholder routes for sidebar links (to be implemented in later phases)
-    Route::get('/attendance', fn () => 'Attendance — Phase 2')->name('attendance.index');
-    Route::get('/leaves', fn () => 'Leave — Phase 2')->name('leaves.index');
+    // Attendance
+    Route::get('/attendance', AttendanceDashboard::class)->name('attendance.index');
+    Route::get('/attendance/geofences', GeoFenceManager::class)
+        ->middleware('role:super_admin,branch_admin,hr_manager')
+        ->name('attendance.geofences');
+
+    // Leave
+    Route::get('/leaves', LeaveIndex::class)->name('leaves.index');
     Route::get('/timetable', fn () => 'Timetable — Phase 3')->name('timetable.index');
     Route::get('/lms', fn () => 'LMS — Phase 3')->name('lms.index');
     Route::get('/placement', fn () => 'Placement — Phase 4')->name('placement.index');
