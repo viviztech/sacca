@@ -9,7 +9,9 @@ use App\Livewire\Admin\UserIndex;
 use App\Livewire\Announcements\AnnouncementManager;
 use App\Livewire\Attendance\AttendanceDashboard;
 use App\Livewire\Attendance\GeoFenceManager;
+use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
+use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Complaints\ComplaintPortal;
 use App\Livewire\Compliance\ComplianceManager;
 use App\Livewire\Dashboard;
@@ -37,6 +39,8 @@ Route::get('/', fn () => redirect()->route('dashboard'));
 // Auth
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
+    Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
+    Route::get('/reset-password/{token}', ResetPassword::class)->name('password.reset');
 });
 
 Route::post('/logout', function () {

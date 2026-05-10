@@ -3,6 +3,7 @@
 namespace App\Livewire\Announcements;
 
 use App\Enums\UserRole;
+use App\Jobs\SendAnnouncementNotification;
 use App\Models\Announcement;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -37,28 +38,35 @@ class AnnouncementManager extends Component
         ]);
 
         $user = auth()->user();
+        $publishNow = $this->publish_now;
 
-        Announcement::create([
+        $announcement = Announcement::create([
             'branch_id' => $user->isSuperAdmin() ? null : $user->branch_id,
             'title' => $this->title,
             'body' => $this->body,
             'category' => $this->category,
             'audience' => count($this->audience) > 0 ? $this->audience : null,
             'published_by' => $user->id,
-            'published_at' => $this->publish_now ? now() : null,
+            'published_at' => $publishNow ? now() : null,
         ]);
+
+        if ($publishNow) {
+            SendAnnouncementNotification::dispatch($announcement)->onQueue('notifications');
+        }
 
         $this->reset(['title', 'body', 'audience']);
         $this->category = 'notice';
         $this->publish_now = true;
         $this->showForm = false;
-        session()->flash('success', 'Announcement '.($this->publish_now ? 'published' : 'saved as draft').'.');
+        session()->flash('success', $publishNow ? 'Announcement published and push notifications sent.' : 'Announcement saved as draft.');
     }
 
     public function publish(int $id): void
     {
-        Announcement::findOrFail($id)->update(['published_at' => now()]);
-        session()->flash('success', 'Announcement published.');
+        $announcement = Announcement::findOrFail($id);
+        $announcement->update(['published_at' => now()]);
+        SendAnnouncementNotification::dispatch($announcement)->onQueue('notifications');
+        session()->flash('success', 'Announcement published and push notifications sent.');
     }
 
     public function delete(int $id): void
