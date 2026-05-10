@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AnnouncementController;
 use App\Http\Controllers\Api\V1\AttendanceController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\LeaveController;
@@ -7,7 +8,9 @@ use App\Http\Controllers\Api\V1\LmsController;
 use App\Http\Controllers\Api\V1\PayslipController;
 use App\Http\Controllers\Api\V1\PlacementController;
 use App\Http\Controllers\Api\V1\StudentAttendanceController;
+use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TimetableController;
+use App\Http\Controllers\Api\V1\WorkReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
@@ -54,4 +57,16 @@ Route::middleware('auth:sanctum')->group(function () {
     // Payslips
     Route::get('/payslips', [PayslipController::class, 'index']);
     Route::get('/payslips/{id}/download', [PayslipController::class, 'download']);
+
+    // Tasks
+    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::patch('/tasks/{id}/status', [TaskController::class, 'updateStatus']);
+
+    // Announcements
+    Route::get('/announcements', [AnnouncementController::class, 'index']);
+    Route::get('/announcements/{id}', [AnnouncementController::class, 'show']);
+
+    // Daily Work Reports
+    Route::get('/work-reports', [WorkReportController::class, 'show']);
+    Route::post('/work-reports', [WorkReportController::class, 'store']);
 });

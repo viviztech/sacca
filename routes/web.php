@@ -6,9 +6,11 @@ use App\Livewire\Admin\BranchForm;
 use App\Livewire\Admin\BranchIndex;
 use App\Livewire\Admin\UserForm;
 use App\Livewire\Admin\UserIndex;
+use App\Livewire\Announcements\AnnouncementManager;
 use App\Livewire\Attendance\AttendanceDashboard;
 use App\Livewire\Attendance\GeoFenceManager;
 use App\Livewire\Auth\Login;
+use App\Livewire\Complaints\ComplaintPortal;
 use App\Livewire\Dashboard;
 use App\Livewire\Documents\DocumentVault;
 use App\Livewire\Grooming\GroomingInspectionForm;
@@ -19,7 +21,10 @@ use App\Livewire\Lms\QuizAttemptPage;
 use App\Livewire\Payroll\PayslipManager;
 use App\Livewire\Placement\CompanyIndex;
 use App\Livewire\Placement\PlacementDriveManager;
+use App\Livewire\Tasks\TaskBoard;
 use App\Livewire\Timetable\TimetableBuilder;
+use App\Livewire\Visitors\VisitorCheckIn;
+use App\Livewire\WorkReports\DailyWorkReportPage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -80,9 +85,14 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('role:super_admin,branch_admin,academic_coordinator,faculty')
         ->name('grooming.index');
 
-    // Placeholders for Phase 5
-    Route::get('/announcements', fn () => 'Announcements — Phase 5')->name('announcements.index');
-    Route::get('/complaints', fn () => 'Complaints — Phase 5')->name('complaints.index');
+    // Phase 5 routes
+    Route::get('/announcements', AnnouncementManager::class)->name('announcements.index');
+    Route::get('/complaints', ComplaintPortal::class)->name('complaints.index');
+    Route::get('/tasks', TaskBoard::class)->name('tasks.index');
+    Route::get('/work-reports', DailyWorkReportPage::class)->name('work-reports.index');
+    Route::get('/visitors', VisitorCheckIn::class)
+        ->middleware('role:super_admin,branch_admin,hr_manager')
+        ->name('visitors.index');
 
     // Super Admin + Branch Admin
     Route::middleware('role:super_admin,branch_admin')->prefix('admin')->name('admin.')->group(function () {
