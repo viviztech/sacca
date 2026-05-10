@@ -3,6 +3,9 @@
 use App\Http\Controllers\Api\V1\AttendanceController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\LeaveController;
+use App\Http\Controllers\Api\V1\LmsController;
+use App\Http\Controllers\Api\V1\StudentAttendanceController;
+use App\Http\Controllers\Api\V1\TimetableController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
@@ -26,4 +29,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/leaves/balances', [LeaveController::class, 'balances']);
     Route::get('/leaves/{leave}', [LeaveController::class, 'show']);
     Route::patch('/leaves/{leave}/cancel', [LeaveController::class, 'cancel']);
+
+    // Timetable
+    Route::get('/timetable/week', [TimetableController::class, 'week']);
+
+    // Student Attendance (faculty)
+    Route::get('/student-attendance/class/{timetableId}', [StudentAttendanceController::class, 'classRoster']);
+    Route::post('/student-attendance/class/{timetableId}', [StudentAttendanceController::class, 'bulkMark']);
+
+    // LMS
+    Route::get('/lms/materials', [LmsController::class, 'materials']);
+    Route::get('/lms/materials/{id}', [LmsController::class, 'show']);
+    Route::post('/lms/assignments/{assignmentId}/submit', [LmsController::class, 'submitAssignment']);
+    Route::get('/lms/quizzes/{quizId}/start', [LmsController::class, 'startQuiz']);
+    Route::post('/lms/quizzes/{quizId}/submit', [LmsController::class, 'submitQuiz']);
 });

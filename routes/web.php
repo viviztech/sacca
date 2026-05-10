@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Academic\StudentAttendanceForm;
+use App\Livewire\Academic\TrainingHourDashboard;
 use App\Livewire\Admin\BranchForm;
 use App\Livewire\Admin\BranchIndex;
 use App\Livewire\Admin\UserForm;
@@ -9,6 +11,10 @@ use App\Livewire\Attendance\GeoFenceManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Dashboard;
 use App\Livewire\Leave\LeaveIndex;
+use App\Livewire\Lms\MaterialLibrary;
+use App\Livewire\Lms\MaterialUpload;
+use App\Livewire\Lms\QuizAttemptPage;
+use App\Livewire\Timetable\TimetableBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,8 +45,19 @@ Route::middleware(['auth'])->group(function () {
 
     // Leave
     Route::get('/leaves', LeaveIndex::class)->name('leaves.index');
-    Route::get('/timetable', fn () => 'Timetable — Phase 3')->name('timetable.index');
-    Route::get('/lms', fn () => 'LMS — Phase 3')->name('lms.index');
+    // Timetable
+    Route::get('/timetable', TimetableBuilder::class)->name('timetable.index');
+
+    // Student Attendance
+    Route::get('/student-attendance', StudentAttendanceForm::class)->name('student-attendance.index');
+
+    // LMS
+    Route::get('/lms', MaterialLibrary::class)->name('lms.index');
+    Route::get('/lms/upload', MaterialUpload::class)->name('lms.upload');
+    Route::get('/lms/quiz/{quizId}', QuizAttemptPage::class)->name('lms.quiz');
+
+    // Training Hours
+    Route::get('/training-hours', TrainingHourDashboard::class)->name('training-hours.index');
     Route::get('/placement', fn () => 'Placement — Phase 4')->name('placement.index');
     Route::get('/announcements', fn () => 'Announcements — Phase 5')->name('announcements.index');
     Route::get('/complaints', fn () => 'Complaints — Phase 5')->name('complaints.index');
