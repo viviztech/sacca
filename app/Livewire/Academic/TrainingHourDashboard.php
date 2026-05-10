@@ -81,7 +81,7 @@ class TrainingHourDashboard extends Component
             ->selectRaw('session_type, SUM(hours_logged) as total_hours')
             ->groupBy('session_type')
             ->get()
-            ->mapWithKeys(fn ($row) => [$row->session_type => $row->total_hours]);
+            ->mapWithKeys(fn ($row) => [$row->session_type->value => $row->total_hours]);
 
         return view('livewire.academic.training-hour-dashboard', [
             'logs' => $logs,

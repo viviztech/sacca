@@ -34,11 +34,13 @@
         </form>
         @else
         <div class="bg-gray-50 rounded-lg p-4">
+            @if($todayReport)
             <p class="text-sm text-gray-700"><strong>Work Summary:</strong> {{ $todayReport->work_summary }}</p>
             @if($todayReport->blockers)
                 <p class="text-sm text-gray-700 mt-2"><strong>Blockers:</strong> {{ $todayReport->blockers }}</p>
             @endif
             <p class="text-xs text-gray-400 mt-2">Submitted at {{ $todayReport->submitted_at?->format('h:i A') }}</p>
+            @endif
         </div>
         @endif
     </div>
