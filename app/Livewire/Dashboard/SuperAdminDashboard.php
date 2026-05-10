@@ -9,7 +9,6 @@ use App\Models\LeaveRequest;
 use App\Models\PlacementApplication;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -23,7 +22,8 @@ class SuperAdminDashboard extends Component
     {
         $today = today();
 
-        $branches = Cache::remember('dashboard.branches', 300, fn () => Branch::where('is_active', true)->get());
+        // Fetch branches fresh — never cache Eloquent collections (serialization issues)
+        $branches = Branch::where('is_active', true)->get();
 
         $branchStats = $branches->map(function (Branch $branch) use ($today) {
             $totalStaff = User::where('branch_id', $branch->id)
