@@ -15,8 +15,6 @@ use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Complaints\ComplaintPortal;
 use App\Livewire\Compliance\ComplianceManager;
 use App\Livewire\Dashboard;
-use App\Livewire\Dashboard\BranchAdminDashboard;
-use App\Livewire\Dashboard\SuperAdminDashboard;
 use App\Livewire\Documents\DocumentVault;
 use App\Livewire\Grooming\GroomingInspectionForm;
 use App\Livewire\Leave\LeaveIndex;
@@ -54,8 +52,6 @@ Route::post('/logout', function () {
 // Authenticated web app
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
-    Route::get('/admin-dashboard', SuperAdminDashboard::class)->middleware('role:super_admin')->name('dashboard.super');
-    Route::get('/branch-dashboard', BranchAdminDashboard::class)->name('dashboard.branch');
 
     // Attendance
     Route::get('/attendance', AttendanceDashboard::class)->name('attendance.index');
