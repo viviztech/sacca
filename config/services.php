@@ -35,6 +35,10 @@ return [
         ],
     ],
 
+    'firebase' => [
+        'credentials' => env('FIREBASE_CREDENTIALS'),
+    ],
+
     'whatsapp' => [
         'url' => env('WHATSAPP_API_URL', 'http://localhost:8003/api'),
     ],

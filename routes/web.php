@@ -11,7 +11,10 @@ use App\Livewire\Attendance\AttendanceDashboard;
 use App\Livewire\Attendance\GeoFenceManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Complaints\ComplaintPortal;
+use App\Livewire\Compliance\ComplianceManager;
 use App\Livewire\Dashboard;
+use App\Livewire\Dashboard\BranchAdminDashboard;
+use App\Livewire\Dashboard\SuperAdminDashboard;
 use App\Livewire\Documents\DocumentVault;
 use App\Livewire\Grooming\GroomingInspectionForm;
 use App\Livewire\Leave\LeaveIndex;
@@ -24,6 +27,7 @@ use App\Livewire\Placement\PlacementDriveManager;
 use App\Livewire\Tasks\TaskBoard;
 use App\Livewire\Timetable\TimetableBuilder;
 use App\Livewire\Visitors\VisitorCheckIn;
+use App\Livewire\Visits\VisitPlanner;
 use App\Livewire\WorkReports\DailyWorkReportPage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +50,8 @@ Route::post('/logout', function () {
 // Authenticated web app
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/admin-dashboard', SuperAdminDashboard::class)->middleware('role:super_admin')->name('dashboard.super');
+    Route::get('/branch-dashboard', BranchAdminDashboard::class)->name('dashboard.branch');
 
     // Attendance
     Route::get('/attendance', AttendanceDashboard::class)->name('attendance.index');
@@ -93,6 +99,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/visitors', VisitorCheckIn::class)
         ->middleware('role:super_admin,branch_admin,hr_manager')
         ->name('visitors.index');
+
+    // Phase 6 routes
+    Route::get('/visits', VisitPlanner::class)
+        ->middleware('role:super_admin,branch_admin,academic_coordinator')
+        ->name('visits.index');
+    Route::get('/compliance', ComplianceManager::class)
+        ->middleware('role:super_admin,branch_admin')
+        ->name('compliance.index');
 
     // Super Admin + Branch Admin
     Route::middleware('role:super_admin,branch_admin')->prefix('admin')->name('admin.')->group(function () {
