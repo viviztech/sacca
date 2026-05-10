@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\V1\AttendanceController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\LeaveController;
 use App\Http\Controllers\Api\V1\LmsController;
+use App\Http\Controllers\Api\V1\PayslipController;
+use App\Http\Controllers\Api\V1\PlacementController;
 use App\Http\Controllers\Api\V1\StudentAttendanceController;
 use App\Http\Controllers\Api\V1\TimetableController;
 use Illuminate\Support\Facades\Route;
@@ -43,4 +45,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/lms/assignments/{assignmentId}/submit', [LmsController::class, 'submitAssignment']);
     Route::get('/lms/quizzes/{quizId}/start', [LmsController::class, 'startQuiz']);
     Route::post('/lms/quizzes/{quizId}/submit', [LmsController::class, 'submitQuiz']);
+
+    // Placement
+    Route::get('/placement/drives', [PlacementController::class, 'drives']);
+    Route::post('/placement/drives/{driveId}/apply', [PlacementController::class, 'apply']);
+    Route::get('/placement/my-applications', [PlacementController::class, 'myApplications']);
+
+    // Payslips
+    Route::get('/payslips', [PayslipController::class, 'index']);
+    Route::get('/payslips/{id}/download', [PayslipController::class, 'download']);
 });

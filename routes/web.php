@@ -10,10 +10,15 @@ use App\Livewire\Attendance\AttendanceDashboard;
 use App\Livewire\Attendance\GeoFenceManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Dashboard;
+use App\Livewire\Documents\DocumentVault;
+use App\Livewire\Grooming\GroomingInspectionForm;
 use App\Livewire\Leave\LeaveIndex;
 use App\Livewire\Lms\MaterialLibrary;
 use App\Livewire\Lms\MaterialUpload;
 use App\Livewire\Lms\QuizAttemptPage;
+use App\Livewire\Payroll\PayslipManager;
+use App\Livewire\Placement\CompanyIndex;
+use App\Livewire\Placement\PlacementDriveManager;
 use App\Livewire\Timetable\TimetableBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -58,7 +63,24 @@ Route::middleware(['auth'])->group(function () {
 
     // Training Hours
     Route::get('/training-hours', TrainingHourDashboard::class)->name('training-hours.index');
-    Route::get('/placement', fn () => 'Placement — Phase 4')->name('placement.index');
+    // Placement
+    Route::get('/placement', PlacementDriveManager::class)->name('placement.index');
+    Route::get('/placement/companies', CompanyIndex::class)->name('placement.companies');
+
+    // Payroll
+    Route::get('/payroll', PayslipManager::class)
+        ->middleware('role:super_admin,branch_admin,hr_manager')
+        ->name('payroll.index');
+
+    // Documents
+    Route::get('/documents', DocumentVault::class)->name('documents.index');
+
+    // Grooming
+    Route::get('/grooming', GroomingInspectionForm::class)
+        ->middleware('role:super_admin,branch_admin,academic_coordinator,faculty')
+        ->name('grooming.index');
+
+    // Placeholders for Phase 5
     Route::get('/announcements', fn () => 'Announcements — Phase 5')->name('announcements.index');
     Route::get('/complaints', fn () => 'Complaints — Phase 5')->name('complaints.index');
 
